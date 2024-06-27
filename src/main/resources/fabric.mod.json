@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "tfa_graves",
+  "version": "${version}",
+  "name": "tfa_graves",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/dthusian/fabric-graves"
+  },
+  "license": "MIT",
+  "icon": "assets/tfa_graves/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "dev.wateralt.mc.tfa_graves.GravesMod"
+    ]
+  },
+  "mixins": [
+    "tfa_graves.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}"
+  }
+}
