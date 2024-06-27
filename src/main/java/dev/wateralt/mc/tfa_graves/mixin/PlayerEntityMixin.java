@@ -19,6 +19,7 @@ public abstract class PlayerEntityMixin {
     if(!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
       if(world instanceof ServerWorld serverWorld) {
         GraveManip.spawnGraveForPlayer(serverWorld, that);
+        GraveManip.logGraveCreation(that);
       }
     }
   }

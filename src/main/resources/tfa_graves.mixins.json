@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ChestMinecartMixin",
-    "EntityMixin",
+    "EntityAccessor",
     "PlayerEntityInvoker",
     "PlayerEntityMixin"
   ],

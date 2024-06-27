@@ -1,13 +1,18 @@
 package dev.wateralt.mc.tfa_graves;
 
 import dev.wateralt.mc.tfa_graves.mixin.PlayerEntityInvoker;
+import net.minecraft.client.util.ChatMessages;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.message.MessageType;
+import net.minecraft.network.message.SentMessage;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -18,9 +23,9 @@ import java.util.List;
 public class GraveManip {
   public static final String GRAVE_ENTITY_TAG = "dev.wateralt.mc.tfa_graves.IsGrave";
   
-  public static ChestMinecartEntity createGravePart(ServerWorld world, Vec3d pos, String name, List<ItemStack> items) {
+  public static ChestMinecartEntity createGravePart(ServerWorld world, Vec3d pos, Text name, List<ItemStack> items) {
     ChestMinecartEntity entity = new ChestMinecartEntity(world, pos.getX(), pos.getY(), pos.getZ());
-    entity.setCustomName(Text.literal(name));
+    entity.setCustomName(name);
     entity.setCustomNameVisible(true);
     entity.setInvulnerable(true);
     entity.setNoGravity(true);
@@ -51,14 +56,8 @@ public class GraveManip {
     }
     items2.add(inv.removeStack(36 + 4));
     
-    Text playerName = player.getDisplayName();
-    String playerNameStr;
-    if(playerName == null) {
-      playerNameStr = player.getNameForScoreboard();
-    } else {
-      playerNameStr = playerName.getString();
-    }
-    String graveName = playerNameStr + "'s Grave";
+    Text graveName = player.getDisplayName().copy();
+    graveName.getSiblings().add(Text.literal("'s Grave"));
     
     double y = player.getPos().getY();
     if(y < player.getWorld().getBottomY() + 1) {
@@ -77,6 +76,28 @@ public class GraveManip {
   public static void removeGraveIfEmpty(ChestMinecartEntity entity) {
     if(entity.getCommandTags().contains(GRAVE_ENTITY_TAG) && entity.getInventory().stream().allMatch(ItemStack::isEmpty)) {
       entity.remove(Entity.RemovalReason.DISCARDED);
+    }
+  }
+  
+  public static void logGraveCreation(PlayerEntity player) {
+    String playerName = player.getName().toString();
+    String dimensionName = player.getWorld().getRegistryKey().getValue().toString();
+    
+    String logMsg = "Grave for player %s spawned at (%.1f, %.1f, %.1f) dimension %s".formatted(
+      playerName,
+      player.getX(), player.getY(), player.getZ(),
+      dimensionName);
+    String chatMsg = "Your grave is at (%.1f, %.1f, %.1f) in dimension %s".formatted(
+      player.getX(), player.getY(), player.getZ(),
+      dimensionName);
+    
+    GravesMod.getInstance().getLogger().info(logMsg);
+    if(player instanceof ServerPlayerEntity player2) {
+      player2.sendMessageToClient(
+        Text.literal(chatMsg)
+          .styled(style -> style.withColor(0xff8800)),
+        false
+      );
     }
   }
 }
