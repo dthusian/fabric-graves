@@ -38,7 +38,7 @@ public class GraveManip {
     return entity;
   }
   
-  public static void spawnGraveForPlayer(ServerWorld world, PlayerEntity player) {
+  public static boolean spawnGraveForPlayer(ServerWorld world, PlayerEntity player) {
     PlayerInventory inv = player.getInventory();
     ((PlayerEntityInvoker) player).invokeVanishCursedItems();
     ArrayList<ItemStack> items1 = new ArrayList<>(27);
@@ -63,12 +63,16 @@ public class GraveManip {
     }
     Vec3d basePos = player.getPos().withAxis(Direction.Axis.Y, y);
     
+    boolean ret = false;
     if(!items1.stream().allMatch(ItemStack::isEmpty)) {
       createGravePart(world, basePos, graveName, items1);
+      ret = true;
     }
     if(!items2.stream().allMatch(ItemStack::isEmpty)) {
       createGravePart(world, basePos.add(0, 0.4, 0), graveName, items2);
+      ret = true;
     }
+    return ret;
   }
   
   public static void removeGraveIfEmpty(ChestMinecartEntity entity) {

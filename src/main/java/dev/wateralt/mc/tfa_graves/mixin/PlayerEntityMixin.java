@@ -1,6 +1,7 @@
 package dev.wateralt.mc.tfa_graves.mixin;
 
 import dev.wateralt.mc.tfa_graves.GraveManip;
+import dev.wateralt.mc.tfa_graves.GravesMod;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameRules;
@@ -18,8 +19,8 @@ public abstract class PlayerEntityMixin {
     World world = that.getWorld();
     if(!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
       if(world instanceof ServerWorld serverWorld) {
-        GraveManip.spawnGraveForPlayer(serverWorld, that);
-        GraveManip.logGraveCreation(that);
+        boolean spawned = GraveManip.spawnGraveForPlayer(serverWorld, that);
+        if(spawned) GraveManip.logGraveCreation(that);
       }
     }
   }
