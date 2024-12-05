@@ -3,6 +3,7 @@ package dev.wateralt.mc.tfa_graves;
 import dev.wateralt.mc.tfa_graves.mixin.PlayerEntityInvoker;
 import net.minecraft.client.util.ChatMessages;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.vehicle.ChestMinecartEntity;
@@ -22,7 +23,8 @@ public class GraveManip {
   public static final String GRAVE_ENTITY_TAG = "dev.wateralt.mc.tfa_graves.IsGrave";
   
   public static ChestMinecartEntity createGravePart(ServerWorld world, Vec3d pos, Text name, List<ItemStack> items) {
-    ChestMinecartEntity entity = new ChestMinecartEntity(world, pos.getX(), pos.getY(), pos.getZ());
+    ChestMinecartEntity entity = new ChestMinecartEntity(EntityType.CHEST_MINECART, world);
+    entity.setPos(pos.getX(), pos.getY(), pos.getZ());
     entity.setCustomName(name);
     entity.setCustomNameVisible(true);
     entity.setInvulnerable(true);

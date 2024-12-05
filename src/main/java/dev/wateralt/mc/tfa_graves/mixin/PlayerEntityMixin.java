@@ -17,8 +17,8 @@ public abstract class PlayerEntityMixin {
   private void dropInventory(CallbackInfo ci) {
     PlayerEntity that = (PlayerEntity) (Object) this;
     World world = that.getWorld();
-    if(!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
-      if(world instanceof ServerWorld serverWorld) {
+    if(world instanceof ServerWorld serverWorld) {
+      if(!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
         boolean spawned = GraveManip.spawnGraveForPlayer(serverWorld, that);
         if(spawned) GraveManip.logGraveCreation(that);
       }
