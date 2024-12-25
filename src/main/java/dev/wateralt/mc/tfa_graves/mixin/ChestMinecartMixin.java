@@ -22,7 +22,6 @@ public abstract class ChestMinecartMixin extends Entity {
 
   @Inject(method = "onClose", at = @At("RETURN"))
   private void onClose(PlayerEntity player, CallbackInfo ci) {
-    GravesMod.getInstance().getLogger().info("ChestMinecartMixin#onClose");
     ChestMinecartEntity that = (ChestMinecartEntity) (Object) this;
     GraveManip.removeGraveIfEmpty(that);
   }
